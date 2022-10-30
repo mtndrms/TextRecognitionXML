@@ -2,55 +2,64 @@ package com.example.textrecognitionxml
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import java.io.File
 
+private lateinit var photoTaken: File
+
 class MainActivity : AppCompatActivity() {
+    companion object {
+        private const val IMAGE_CHOOSE = 1000
+        private const val TAKE_PHOTO = 1001
+        private const val PERMISSION_CODE = 1002
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val btnPickImage: Button = findViewById(R.id.btnPickImage)
+        val btnTakePhoto: Button = findViewById(R.id.btnTakePhoto)
 
-        /*
         btnTakePhoto.setOnClickListener {
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            filePhoto = getPhotoFile(FILE_NAME)
-
-
-            val providerFile =FileProvider.getUriForFile(this,"com.example.androidcamera.fileprovider", filePhoto)
+            photoTaken = getPhotoFile()
+            val providerFile = FileProvider.getUriForFile(
+                this,
+                "com.example.textrecognitionxml.fileprovider",
+                photoTaken
+            )
             takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerFile)
-            if (takePhotoIntent.resolveActivity(this.packageManager) != null){
-                startActivityForResult(takePhotoIntent, REQUEST_CODE)
-            }else {
-                Toast.makeText(this,"Camera could not open", Toast.LENGTH_SHORT).show()
+
+            try {
+                startActivityForResult(takePhotoIntent, TAKE_PHOTO)
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(this, "Camera could not open", Toast.LENGTH_SHORT).show()
             }
         }
-         */
 
         btnPickImage.setOnClickListener {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 requestPermissions(permissions, PERMISSION_CODE)
             } else {
-                chooseImageGallery();
+                chooseImageGallery()
             }
         }
     }
@@ -60,15 +69,8 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, IMAGE_CHOOSE)
     }
 
-    companion object {
-        private val IMAGE_CHOOSE = 1000;
-        private val PERMISSION_CODE = 1001;
-    }
-
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -82,39 +84,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getPhotoFile(fileName: String): File {
+    private fun getPhotoFile(): File {
         val directoryStorage = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(fileName, ".jpg", directoryStorage)
+        return File.createTempFile("photo", ".jpg", directoryStorage)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val ivImage: ImageView = findViewById(R.id.ivImage)
         val tvExtractedText: TextView = findViewById(R.id.tvExtractedText)
 
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val takenPhoto = BitmapFactory.decodeFile(filePhoto.absolutePath)
-            ivImage.setImageBitmap(takenPhoto)
+        if (requestCode == TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            val takenPhoto = BitmapFactory.decodeFile(photoTaken.absolutePath)
+            extractedText(tvExtractedText, ivImage, takenPhoto)
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+
         if (requestCode == IMAGE_CHOOSE && resultCode == Activity.RESULT_OK) {
-            ivImage.setImageURI(data?.data)
-            extractedText(applicationContext, tvExtractedText, data?.data)
+            val chosenPhotoBitmap =
+                MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+            extractedText(tvExtractedText, ivImage, chosenPhotoBitmap)
         }
     }
 
-    private fun extractedText(applicationContext: Context, textView: TextView, uri: Uri?) {
-        val inputImage = InputImage.fromFilePath(applicationContext, uri!!)
+    private fun extractedText(textView: TextView, imageView: ImageView, bitmap: Bitmap) {
         val recognizer: TextRecognizer =
             TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-        recognizer.process(inputImage).addOnSuccessListener {
-            textView.text = it.text
-        }.addOnFailureListener {
-            Log.e("ERROR", "Error while extracting text from image.")
+        val inputImage = InputImage.fromBitmap(bitmap, 0)
+
+        imageView.setImageBitmap(bitmap)
+
+        inputImage.let { image ->
+            recognizer.process(image).addOnSuccessListener {
+                textView.text = it.text
+            }.addOnFailureListener {
+                Toast.makeText(this, "Failed to extract text", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
-
-private const val REQUEST_CODE = 13
-private lateinit var filePhoto: File
-private const val FILE_NAME = "photo.jpg"
