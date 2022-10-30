@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TextRecognitionXML</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="pick_image">Pick Image</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="image_chosen_by_user">image chosen by user</string>
+    <string name="scan">Scan</string>
 </resources>

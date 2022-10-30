@@ -10,12 +10,12 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
@@ -34,10 +34,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val btnPickImage: Button = findViewById(R.id.btnPickImage)
-        val btnTakePhoto: Button = findViewById(R.id.btnTakePhoto)
+        val fabPickImage: FloatingActionButton = findViewById(R.id.fabPickImage)
+        val fabTakePhoto: FloatingActionButton = findViewById(R.id.fabTakePhoto)
 
-        btnTakePhoto.setOnClickListener {
+        fabTakePhoto.setOnClickListener {
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             photoTaken = getPhotoFile()
             val providerFile = FileProvider.getUriForFile(
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        btnPickImage.setOnClickListener {
+        fabPickImage.setOnClickListener {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 requestPermissions(permissions, PERMISSION_CODE)

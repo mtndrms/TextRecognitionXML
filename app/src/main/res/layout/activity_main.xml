@@ -4,47 +4,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:contentDescription="image chosen by user"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="0dp"
+        android:contentDescription="@string/image_chosen_by_user"
+        app:layout_constraintBottom_toTopOf="@id/tvExtractedText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnPickImage"/>
-
-    <Button
-        android:id="@+id/btnPickImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pick Image"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/ivImage"
-        app:layout_constraintBottom_toTopOf="@id/tvExtractedText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnTakePhoto"/>
-
-    <Button
-        android:id="@+id/btnTakePhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Take Photo"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/ivImage"
-        app:layout_constraintBottom_toTopOf="@id/tvExtractedText"
-        app:layout_constraintStart_toEndOf="@id/btnPickImage"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvExtractedText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:textSize="16sp"
         android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/btnPickImage"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:textSize="16sp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivImage" />
 
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/mlBottomNavigationContainer"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layoutDescription="@xml/floating_action_button_group_scene"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bottom_navigation_background"
+            app:itemIconTint="@color/blue"
+            app:itemTextColor="@color/black"
+            app:labelVisibilityMode="selected"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/navigation" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabTakePhoto"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:contentDescription="@string/take_photo"
+            app:backgroundTint="@color/lighter_blue"
+            android:visibility="invisible"
+            app:elevation="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_camera_outlined"
+            app:tint="@color/gray" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabPickImage"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="30dp"
+            android:contentDescription="@string/pick_image"
+            android:visibility="invisible"
+            app:backgroundTint="@color/lighter_blue"
+            app:elevation="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_insetEdge="bottom"
+            app:srcCompat="@drawable/ic_upload_outlined"
+            app:tint="@color/gray" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingButton"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:contentDescription="@string/scan"
+            app:backgroundTint="@color/lighter_blue"
+            app:elevation="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_scan_outlined"
+            app:tint="@color/gray" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
