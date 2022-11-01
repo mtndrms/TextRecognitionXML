@@ -1,4 +1,4 @@
-package com.example.textrecognitionxml
+package com.example.textrecognitionxml.ui.activities
 
 import android.Manifest
 import android.app.Activity
@@ -14,17 +14,27 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.FileProvider
+import com.example.textrecognitionxml.R
+import com.example.textrecognitionxml.utils.ScanActivityUtils
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.io.File
 
 private lateinit var photoTaken: File
 
 class MainActivity : AppCompatActivity() {
+    var text: String = ""
+
     companion object {
         private const val IMAGE_CHOOSE = 1000
         private const val TAKE_PHOTO = 1001
@@ -34,10 +44,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.navigation)
+        val fabGroup: MotionLayout = findViewById(R.id.mlBottomNavigationContainer)
         val fabPickImage: FloatingActionButton = findViewById(R.id.fabPickImage)
         val fabTakePhoto: FloatingActionButton = findViewById(R.id.fabTakePhoto)
+        val fabMain: FloatingActionButton = findViewById(R.id.floatingButton)
+
+        bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> println("Home")
+                R.id.profile -> println("Profile")
+                else -> println("Nothing")
+            }
+            true
+        }
 
         fabTakePhoto.setOnClickListener {
+            if (fabGroup.currentState == fabGroup.endState) {
+                fabGroup.transitionToStart()
+            }
+
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             photoTaken = getPhotoFile()
             val providerFile = FileProvider.getUriForFile(
@@ -55,6 +82,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         fabPickImage.setOnClickListener {
+            if (fabGroup.currentState == fabGroup.endState) {
+                fabGroup.transitionToStart()
+            }
+            
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 requestPermissions(permissions, PERMISSION_CODE)
@@ -89,37 +120,46 @@ class MainActivity : AppCompatActivity() {
         return File.createTempFile("photo", ".jpg", directoryStorage)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val ivImage: ImageView = findViewById(R.id.ivImage)
-        val tvExtractedText: TextView = findViewById(R.id.tvExtractedText)
-
         if (requestCode == TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             val takenPhoto = BitmapFactory.decodeFile(photoTaken.absolutePath)
-            extractedText(tvExtractedText, ivImage, takenPhoto)
+            GlobalScope.launch {
+                extractedText(takenPhoto)
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
 
         if (requestCode == IMAGE_CHOOSE && resultCode == Activity.RESULT_OK) {
-            val chosenPhotoBitmap =
-                MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
-            extractedText(tvExtractedText, ivImage, chosenPhotoBitmap)
+            val chosenPhoto = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
+            GlobalScope.launch {
+                extractedText(chosenPhoto)
+            }
         }
     }
 
-    private fun extractedText(textView: TextView, imageView: ImageView, bitmap: Bitmap) {
+    @OptIn(DelicateCoroutinesApi::class)
+    private suspend fun extractedText(bitmap: Bitmap) {
         val recognizer: TextRecognizer =
             TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         val inputImage = InputImage.fromBitmap(bitmap, 0)
 
-        imageView.setImageBitmap(bitmap)
+        ScanActivityUtils.bitmap = bitmap
 
         inputImage.let { image ->
-            recognizer.process(image).addOnSuccessListener {
-                textView.text = it.text
-            }.addOnFailureListener {
-                Toast.makeText(this, "Failed to extract text", Toast.LENGTH_SHORT).show()
+            val value = GlobalScope.async {
+                recognizer.process(image).addOnSuccessListener {
+                    ScanActivityUtils.extractedText = it.text
+                }.addOnFailureListener {
+                    Toast.makeText(applicationContext, "Failed to extract text", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            value.await().addOnSuccessListener {
+                val intent = Intent(applicationContext, ScanActivity::class.java)
+                startActivity(intent)
             }
         }
     }

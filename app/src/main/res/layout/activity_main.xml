@@ -5,27 +5,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".MainActivity">
+    tools:context=".ui.activities.MainActivity">
 
-    <ImageView
-        android:id="@+id/ivImage"
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/bottom_navigation_background"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:contentDescription="@string/navigation_icon"
+            android:src="@drawable/ic_camera_outlined" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:text="@string/home"
+            android:textAlignment="center"
+            android:textColor="@color/font_color_dark"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:contentDescription="@string/navigation_icon"
+            android:src="@drawable/ic_camera_outlined" />
+    </RelativeLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="com.example.textrecognitionxml.ui.fragments.HomeFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:contentDescription="@string/image_chosen_by_user"
-        app:layout_constraintBottom_toTopOf="@id/tvExtractedText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        tools:layout="@layout/fragment_home">
 
-    <TextView
-        android:id="@+id/tvExtractedText"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivImage" />
+    </androidx.fragment.app.FragmentContainerView>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/mlBottomNavigationContainer"
@@ -52,8 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:contentDescription="@string/take_photo"
-            app:backgroundTint="@color/lighter_blue"
             android:visibility="invisible"
+            app:backgroundTint="@color/lighter_blue"
             app:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -94,4 +123,11 @@
             app:srcCompat="@drawable/ic_scan_outlined"
             app:tint="@color/gray" />
     </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="60dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
