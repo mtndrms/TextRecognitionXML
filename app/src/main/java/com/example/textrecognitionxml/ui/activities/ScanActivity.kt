@@ -1,23 +1,31 @@
 package com.example.textrecognitionxml.ui.activities
 
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.createBitmap
-import androidx.core.view.isVisible
 import com.example.textrecognitionxml.R
 import com.example.textrecognitionxml.utils.ContextExtensions
 import com.example.textrecognitionxml.utils.ScanActivityUtils
 import com.example.textrecognitionxml.views.TextArea
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizer
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import kotlinx.coroutines.*
 
-class ScanActivity : AppCompatActivity() {
+class ScanActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
@@ -34,7 +42,8 @@ class ScanActivity : AppCompatActivity() {
         val ivShare: ImageView = findViewById(R.id.ivShare)
         val fabEdit: FloatingActionButton = findViewById(R.id.fabEdit)
         val etEditor: TextArea = findViewById(R.id.etEditor)
-        val svTextAreaContainer: ScrollView = findViewById(R.id.svTextAreaContainer)
+
+        tvExtractedText.movementMethod = ScrollingMovementMethod()
 
         ivImage.setImageBitmap(ScanActivityUtils.bitmap)
         tvExtractedText.text = ScanActivityUtils.extractedText
@@ -55,11 +64,12 @@ class ScanActivity : AppCompatActivity() {
         }
 
         fabEdit.setOnClickListener {
-            if (!svTextAreaContainer.isVisible) {
+            println(state)
+            if (state == 0) {
                 fabEdit.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_done))
 
                 tvExtractedText.visibility = View.INVISIBLE
-                svTextAreaContainer.visibility = View.VISIBLE
+                etEditor.visibility = View.VISIBLE
 
                 etEditor.setText(ScanActivityUtils.extractedText, TextView.BufferType.EDITABLE)
 
@@ -70,7 +80,7 @@ class ScanActivity : AppCompatActivity() {
                 ScanActivityUtils.extractedText = etEditor.text.toString()
                 tvExtractedText.text = ScanActivityUtils.extractedText
 
-                svTextAreaContainer.visibility = View.INVISIBLE
+                etEditor.visibility = View.INVISIBLE
                 tvExtractedText.visibility = View.VISIBLE
 
                 if (state == 1) {
@@ -80,6 +90,10 @@ class ScanActivity : AppCompatActivity() {
                 state = 0
             }
         }
+
+        launch {
+            extractedText(bitmap = ScanActivityUtils.bitmap)
+        }
     }
 
     override fun onDestroy() {
@@ -88,6 +102,47 @@ class ScanActivity : AppCompatActivity() {
         ScanActivityUtils.run {
             extractedText = ""
             bitmap = createBitmap(1, 1)
+        }
+    }
+
+    private suspend fun extractedText(bitmap: Bitmap) {
+        val recognizer: TextRecognizer =
+            TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        val inputImage = InputImage.fromBitmap(bitmap, 0)
+        val tvExtractedText: TextView = findViewById(R.id.tvExtractedText)
+        val motionLayout: MotionLayout = findViewById(R.id.motionLayout)
+
+        ScanActivityUtils.bitmap = bitmap
+
+        inputImage.let { image ->
+            val value = withContext(Dispatchers.Default) {
+                async {
+                    recognizer.process(image).addOnSuccessListener {
+                        ScanActivityUtils.extractedText = it.text
+                    }.addOnFailureListener {
+                        Toast.makeText(
+                            applicationContext, "Failed to extract text", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+            value.await().addOnSuccessListener {
+                val timer = object : CountDownTimer(it.text.length.toLong() * 10, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        if (motionLayout.currentState == motionLayout.startState) {
+                            motionLayout.transitionToEnd()
+                        } else {
+                            motionLayout.transitionToStart()
+                        }
+                    }
+
+                    override fun onFinish() {
+                        motionLayout.jumpToState(motionLayout.startState)
+                        tvExtractedText.text = it.text
+                    }
+                }
+                timer.start()
+            }
         }
     }
 }

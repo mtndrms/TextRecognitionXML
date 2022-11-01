@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.example.textrecognitionxml.R
 import com.example.textrecognitionxml.utils.ScanActivityUtils
@@ -33,8 +34,6 @@ import java.io.File
 private lateinit var photoTaken: File
 
 class MainActivity : AppCompatActivity() {
-    var text: String = ""
-
     companion object {
         private const val IMAGE_CHOOSE = 1000
         private const val TAKE_PHOTO = 1001
@@ -60,17 +59,33 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        fabTakePhoto.setOnClickListener {
+        fabMain.setOnClickListener {
+            println("HMM")
             if (fabGroup.currentState == fabGroup.endState) {
-                fabGroup.transitionToStart()
+                println("TEST")
+                fabMain.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.ic_scan_outlined
+                    )
+                )
+            } else {
+                println("TEST 2")
+                fabMain.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this, R.drawable.ic_scan_filled
+                    )
+                )
             }
+        }
+
+        fabTakePhoto.setOnClickListener {
+            fabGroup.transitionToStart()
 
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             photoTaken = getPhotoFile()
             val providerFile = FileProvider.getUriForFile(
-                this,
-                "com.example.textrecognitionxml.fileprovider",
-                photoTaken
+                this, "com.example.textrecognitionxml.fileprovider", photoTaken
             )
             takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerFile)
 
@@ -82,10 +97,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         fabPickImage.setOnClickListener {
-            if (fabGroup.currentState == fabGroup.endState) {
-                fabGroup.transitionToStart()
-            }
-            
+            fabGroup.transitionToStart()
+
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                 val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                 requestPermissions(permissions, PERMISSION_CODE)
@@ -120,47 +133,21 @@ class MainActivity : AppCompatActivity() {
         return File.createTempFile("photo", ".jpg", directoryStorage)
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val intent = Intent(this, ScanActivity::class.java)
         if (requestCode == TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             val takenPhoto = BitmapFactory.decodeFile(photoTaken.absolutePath)
-            GlobalScope.launch {
-                extractedText(takenPhoto)
-            }
+            ScanActivityUtils.bitmap = takenPhoto
+            startActivity(intent)
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
 
         if (requestCode == IMAGE_CHOOSE && resultCode == Activity.RESULT_OK) {
             val chosenPhoto = MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
-            GlobalScope.launch {
-                extractedText(chosenPhoto)
-            }
-        }
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    private suspend fun extractedText(bitmap: Bitmap) {
-        val recognizer: TextRecognizer =
-            TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-        val inputImage = InputImage.fromBitmap(bitmap, 0)
-
-        ScanActivityUtils.bitmap = bitmap
-
-        inputImage.let { image ->
-            val value = GlobalScope.async {
-                recognizer.process(image).addOnSuccessListener {
-                    ScanActivityUtils.extractedText = it.text
-                }.addOnFailureListener {
-                    Toast.makeText(applicationContext, "Failed to extract text", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-            value.await().addOnSuccessListener {
-                val intent = Intent(applicationContext, ScanActivity::class.java)
-                startActivity(intent)
-            }
+            ScanActivityUtils.bitmap = chosenPhoto
+            startActivity(intent)
         }
     }
 }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/activity_scan_scene"
     tools:context=".ui.activities.ScanActivity">
 
     <RelativeLayout
@@ -57,6 +59,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar" />
 
+    <ImageView
+        android:id="@+id/ivLine"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:contentDescription="@string/scanning_animation_line"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_scan_line_2"
+        app:layout_constraintTop_toTopOf="@id/ivImage" />
+
     <TextView
         android:id="@+id/tvExtractedText"
         android:layout_width="match_parent"
@@ -64,35 +75,33 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        android:scrollbars = "vertical"
+        android:maxLines="999999999"
         android:textAlignment="viewStart"
         android:textColor="@color/black"
         android:textSize="16sp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivImage" />
 
-    <ScrollView
-        android:id="@+id/svTextAreaContainer"
+    <com.example.textrecognitionxml.views.TextArea
+        android:id="@+id/etEditor"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        android:gravity="start"
+        android:importantForAutofill="no"
+        android:inputType="text|textMultiLine|textNoSuggestions"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivImage">
-
-        <com.example.textrecognitionxml.views.TextArea
-            android:id="@+id/etEditor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="25dp"
-            android:gravity="start"
-            android:importantForAutofill="no"
-            android:inputType="text|textMultiLine|textNoSuggestions"
-            android:textAlignment="viewStart"
-            android:textSize="16sp"
-            tools:ignore="LabelFor" />
-    </ScrollView>
+        app:layout_constraintTop_toBottomOf="@id/ivImage"
+        tools:ignore="LabelFor" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabEdit"
@@ -106,4 +115,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/gray" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
