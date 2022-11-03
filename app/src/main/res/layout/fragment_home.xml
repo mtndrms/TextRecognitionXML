@@ -1,16 +1,394 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/fragment_home_scene"
     tools:context=".ui.fragments.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:id="@+id/containerTop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@color/font_color_dark"
-        android:gravity="center"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tvMyDocuments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/ivList"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/my_documents"
+            android:textColor="@color/font_color_dark"
+            android:textSize="36sp" />
+
+        <ImageView
+            android:id="@+id/ivCheckBox"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/tvMyDocuments"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/check_box"
+            android:src="@drawable/ic_check_box_outlined"
+            app:tint="@color/font_color_light" />
+
+        <ImageView
+            android:id="@+id/ivList"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@id/ivCheckBox"
+            android:layout_alignBottom="@id/tvMyDocuments"
+            android:layout_marginEnd="40dp"
+            android:contentDescription="@string/list"
+            android:src="@drawable/ic_list"
+            app:layout_constraintEnd_toStartOf="@id/ivCheckBox"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/font_color_light" />
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerFoldersSegment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/recentResults"
+        app:layout_constraintTop_toBottomOf="@id/containerTop">
+
+        <TextView
+            android:id="@+id/tvFolders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/folders"
+            android:textColor="@color/font_color_light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/add"
+            android:textColor="@color/lighter_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFolders">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="8dp">
+
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/lighter_blue"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:contentDescription="@string/folder_s_icon"
+                            android:src="@drawable/ic_folder"
+                            app:tint="@color/gray" />
+
+                        <TextView
+                            android:id="@+id/tvFolderTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="Notes for Work"
+                            android:textColor="@color/font_color_light" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
+                            android:text="7 Files"
+                            android:textColor="@color/font_color_light" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="8dp">
+
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/gray"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:contentDescription="@string/folder_s_icon"
+                            android:src="@drawable/ic_folder"
+                            app:tint="@color/font_color_dark" />
+
+                        <TextView
+                            android:id="@+id/tvFolderTitle2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="Book Quotes"
+                            android:textColor="@color/font_color_dark" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
+                            android:text="214 Files"
+                            android:textColor="@color/font_color_dark" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="8dp">
+
+                    <LinearLayout
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/gray"
+                        android:orientation="vertical"
+                        android:padding="15dp">
+
+                        <ImageView
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:contentDescription="@string/folder_s_icon"
+                            android:src="@drawable/ic_folder"
+                            app:tint="@color/font_color_dark" />
+
+                        <TextView
+                            android:id="@+id/tvFolderTitle3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="Education"
+                            android:textColor="@color/font_color_dark" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_regular"
+                            android:text="42 Files"
+                            android:textColor="@color/font_color_dark" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/recentResults"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/bg_recent_files"
+        android:maxHeight="350dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/ivExpand"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/recent_results"
+                android:textColor="@color/font_color_light"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/ivExpand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="25dp"
+                android:contentDescription="@string/expand_recent_results_list"
+                android:src="@drawable/ic_arrow_up" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:columnCount="3"
+                android:useDefaultMargins="true">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Pellentesque orci risus, pretium non dolor sed, tristique fringilla purus." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="In hac habitasse platea dictumst. Nulla nec tempor sem, a eleifend libero. Donec malesuada, nibh quis luctus ultricies, diam tortor aliquet turpis, nec lobortis est nibh non libero. " />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Nunc id sollicitudin mauris, commodo tincidunt sapien." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Maecenas pretium posuere augue id pharetra. Vivamus viverra sed urna nec gravida." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Ut posuere euismod sollicitudin. Nunc sapien augue, maximus eu lorem vel, consequat mollis metus." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Curabitur feugiat sapien nec enim pharetra blandit." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Donec metus lorem, aliquet eu efficitur quis, venenatis in tellus." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Phasellus consectetur in lorem vitae bibendum." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Pellentesque orci risus, pretium non dolor sed, tristique fringilla purus." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="In hac habitasse platea dictumst. Nulla nec tempor sem, a eleifend libero. Donec malesuada, nibh quis luctus ultricies, diam tortor aliquet turpis, nec lobortis est nibh non libero. " />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Nunc id sollicitudin mauris, commodo tincidunt sapien." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Maecenas pretium posuere augue id pharetra. Vivamus viverra sed urna nec gravida." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Ut posuere euismod sollicitudin. Nunc sapien augue, maximus eu lorem vel, consequat mollis metus." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Curabitur feugiat sapien nec enim pharetra blandit." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Donec metus lorem, aliquet eu efficitur quis, venenatis in tellus." />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
+                    android:layout_columnWeight="1"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Phasellus consectetur in lorem vitae bibendum." />
+            </GridLayout>
+        </ScrollView>
+    </LinearLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -50,6 +50,11 @@ class MainActivity : AppCompatActivity() {
         val fabTakePhoto: FloatingActionButton = findViewById(R.id.fabTakePhoto)
         val fabMain: FloatingActionButton = findViewById(R.id.floatingButton)
 
+        val color = ContextCompat.getColor(this, R.color.lighter_blue)
+
+        window.statusBarColor = color
+        window.navigationBarColor = color
+
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> println("Home")

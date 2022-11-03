@@ -7,51 +7,13 @@
     android:background="@color/background"
     tools:context=".ui.activities.MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/bottom_navigation_background"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/ivMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:contentDescription="@string/navigation_icon"
-            android:src="@drawable/ic_camera_outlined" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:text="@string/home"
-            android:textAlignment="center"
-            android:textColor="@color/font_color_dark"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/ivBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:contentDescription="@string/navigation_icon"
-            android:src="@drawable/ic_camera_outlined" />
-    </RelativeLayout>
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="com.example.textrecognitionxml.ui.fragments.HomeFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
-        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout="@layout/fragment_home">
 
     </androidx.fragment.app.FragmentContainerView>

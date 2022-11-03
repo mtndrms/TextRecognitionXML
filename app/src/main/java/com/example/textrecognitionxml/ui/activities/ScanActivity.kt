@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.method.ScrollingMovementMethod
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import com.example.textrecognitionxml.R
@@ -64,7 +64,6 @@ class ScanActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
 
         fabEdit.setOnClickListener {
-            println(state)
             if (state == 0) {
                 fabEdit.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_done))
 
@@ -110,9 +109,25 @@ class ScanActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         val inputImage = InputImage.fromBitmap(bitmap, 0)
         val tvExtractedText: TextView = findViewById(R.id.tvExtractedText)
-        val motionLayout: MotionLayout = findViewById(R.id.motionLayout)
+        val ivLine: ImageView = findViewById(R.id.ivLine)
+        val scanAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.scan_animation)
 
         ScanActivityUtils.bitmap = bitmap
+
+        scanAnimation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {
+                ivLine.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                ivLine.visibility = View.INVISIBLE
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {
+            }
+        })
+
+        ivLine.startAnimation(scanAnimation)
 
         inputImage.let { image ->
             val value = withContext(Dispatchers.Default) {
@@ -127,17 +142,12 @@ class ScanActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 }
             }
             value.await().addOnSuccessListener {
-                val timer = object : CountDownTimer(it.text.length.toLong() * 10, 1000) {
+                val timer = object : CountDownTimer(it.text.length.toLong(), 1000) {
                     override fun onTick(millisUntilFinished: Long) {
-                        if (motionLayout.currentState == motionLayout.startState) {
-                            motionLayout.transitionToEnd()
-                        } else {
-                            motionLayout.transitionToStart()
-                        }
                     }
 
                     override fun onFinish() {
-                        motionLayout.jumpToState(motionLayout.startState)
+                        ivLine.clearAnimation()
                         tvExtractedText.text = it.text
                     }
                 }

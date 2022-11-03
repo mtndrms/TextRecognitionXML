@@ -12,4 +12,13 @@
     <string name="result">Result</string>
     <string name="edit_extracted_text">Edit extracted text</string>
     <string name="scanning_animation_line">Scanning animation line</string>
+    <string name="recent_files">RECENT FILES</string>
+    <string name="recent_results">RECENT RESULTS</string>
+    <string name="expand_recent_results_list">Expand recent results list</string>
+    <string name="my_documents">My\nDocuments</string>
+    <string name="list">List</string>
+    <string name="check_box">Check Box</string>
+    <string name="folders">FOLDERS</string>
+    <string name="add">Add</string>
+    <string name="folder_s_icon">Folder\'s icon</string>
 </resources>
