@@ -7,5 +7,5 @@
         android:fromYDelta="0%p"
         android:repeatCount="infinite"
         android:repeatMode="restart"
-        android:toYDelta="40%p" />
+        android:toYDelta="100%p" />
 </set>

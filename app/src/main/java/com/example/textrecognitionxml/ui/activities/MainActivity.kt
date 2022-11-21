@@ -5,13 +5,10 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -21,14 +18,6 @@ import com.example.textrecognitionxml.R
 import com.example.textrecognitionxml.utils.ScanActivityUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizer
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import java.io.File
 
 private lateinit var photoTaken: File
@@ -64,10 +53,9 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        // FIXME: Icon doesn't change
         fabMain.setOnClickListener {
-            println("HMM")
             if (fabGroup.currentState == fabGroup.endState) {
-                println("TEST")
                 fabMain.setImageDrawable(
                     ContextCompat.getDrawable(
                         this,
@@ -75,7 +63,6 @@ class MainActivity : AppCompatActivity() {
                     )
                 )
             } else {
-                println("TEST 2")
                 fabMain.setImageDrawable(
                     ContextCompat.getDrawable(
                         this, R.drawable.ic_scan_filled

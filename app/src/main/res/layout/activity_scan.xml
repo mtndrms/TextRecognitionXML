@@ -2,61 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activities.ScanActivity">
-
-    <RelativeLayout
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/bottom_navigation_background"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/ivClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:contentDescription="@string/navigation_icon"
-            android:src="@drawable/ic_close" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:text="@string/result"
-            android:textAlignment="center"
-            android:textColor="@color/font_color_dark"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/ivShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:contentDescription="@string/navigation_icon"
-            android:src="@drawable/ic_share" />
-    </RelativeLayout>
 
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="10dp"
+        android:layout_margin="25dp"
         android:contentDescription="@string/image_chosen_by_user"
-        app:layout_constraintBottom_toTopOf="@id/tvExtractedText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topBar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivLine"
@@ -64,55 +23,6 @@
         android:layout_height="30dp"
         android:contentDescription="@string/scanning_animation_line"
         android:scaleType="fitXY"
-        android:src="@drawable/img_scan_line_2"
-        android:visibility="invisible"
+        android:src="@drawable/img_scan_line"
         app:layout_constraintTop_toTopOf="@id/ivImage" />
-
-    <TextView
-        android:id="@+id/tvExtractedText"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
-        android:maxLines="999999999"
-        android:scrollbars="vertical"
-        android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivImage" />
-
-    <com.example.textrecognitionxml.views.TextArea
-        android:id="@+id/etEditor"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25dp"
-        android:gravity="start"
-        android:importantForAutofill="no"
-        android:inputType="text|textMultiLine|textNoSuggestions"
-        android:textAlignment="viewStart"
-        android:textSize="16sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivImage"
-        tools:ignore="LabelFor" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/lighter_blue"
-        android:contentDescription="@string/edit_extracted_text"
-        android:src="@drawable/ic_edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/gray" />
 </androidx.constraintlayout.widget.ConstraintLayout>
