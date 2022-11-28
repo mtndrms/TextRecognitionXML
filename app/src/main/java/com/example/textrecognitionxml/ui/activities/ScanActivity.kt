@@ -29,11 +29,6 @@ class ScanActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
         val ivImage: ImageView = findViewById(R.id.ivImage)
 
-        val color = ContextCompat.getColor(this, R.color.lighter_blue)
-
-        window.statusBarColor = color
-        window.navigationBarColor = color
-
         ivImage.setImageBitmap(ScanActivityUtils.bitmap)
 
         launch {

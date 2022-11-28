@@ -53,16 +53,10 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         val etEditor: TextArea = findViewById(R.id.etEditor)
         val ddTargetLanguages: TextInputLayout = findViewById(R.id.ddTargetLanguages)
 
-        val color = ContextCompat.getColor(this, R.color.lighter_blue)
-
-        window.statusBarColor = color
-        window.navigationBarColor = color
-
         tvExtractedText.movementMethod = ScrollingMovementMethod()
         tvExtractedText.text = ScanActivityUtils.extractedText
 
         ivClose.setOnClickListener {
-
             finish()
         }
 

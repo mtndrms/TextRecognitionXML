@@ -3,7 +3,7 @@ package com.example.textrecognitionxml.models
 import java.util.Calendar
 import java.util.Date
 
-data class ScanResult(
+data class Document(
     val id: Int,
     val folderId: Int,
     val title: String,
