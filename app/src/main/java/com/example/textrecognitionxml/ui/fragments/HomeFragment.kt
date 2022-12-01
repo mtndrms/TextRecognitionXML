@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import com.example.textrecognitionxml.R
+import com.example.textrecognitionxml.models.Folder
+import com.example.textrecognitionxml.services.FolderService
+import com.example.textrecognitionxml.utils.DatabaseHelper
 import com.example.textrecognitionxml.utils.FakeDatabase
 import com.example.textrecognitionxml.views.FolderCard
 import com.google.android.material.card.MaterialCardView
@@ -18,9 +21,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -28,10 +29,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val folderService = FolderService(requireContext().applicationContext)
         val llFolderCardsContainer: LinearLayout = view.findViewById(R.id.llFolderCardsContainer)
 
-        FakeDatabase.generateFolderAndItsDocuments()
-        FakeDatabase.folders.forEach {
+        val foldersFromDatabase = folderService.getAllFoldersWithTheirDocuments()
+        foldersFromDatabase.forEach {
             llFolderCardsContainer.addView(FolderCard(requireActivity(), it))
         }
     }

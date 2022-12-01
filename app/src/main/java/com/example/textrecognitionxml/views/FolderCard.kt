@@ -1,10 +1,8 @@
 package com.example.textrecognitionxml.views
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -67,7 +65,7 @@ class FolderCard constructor(
         tvFolderSize.setTextColor(ContextCompat.getColor(context, R.color.font_color_dark))
 
         tvFolderTitle.text = folder.name
-        tvFolderSize.text = "${folder.documents.size} Files"
+        tvFolderSize.text = "${folder.documents.size} documents"
 
         linearLayout.addView(ivFolderIcon)
         linearLayout.addView(tvFolderTitle)

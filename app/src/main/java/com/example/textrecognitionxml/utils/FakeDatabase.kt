@@ -5,7 +5,7 @@ import com.example.textrecognitionxml.models.Folder
 import java.util.*
 
 object FakeDatabase {
-    val documents: List<Document> = listOf(
+    private val documents: List<Document> = listOf(
         Document(
             0,
             0,
@@ -86,9 +86,9 @@ object FakeDatabase {
     )
 
     val folders: List<Folder> = listOf(
-        Folder(0, "Notes for Work", mutableListOf()),
-        Folder(1, "Book Quotes", mutableListOf()),
-        Folder(2, "Education", mutableListOf())
+        Folder(0, "Notes for Work"),
+        Folder(1, "Book Quotes"),
+        Folder(2, "Education")
     )
 
     fun generateFolderAndItsDocuments() {

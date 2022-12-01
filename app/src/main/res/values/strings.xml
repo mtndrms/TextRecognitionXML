@@ -21,4 +21,13 @@
     <string name="folder_s_icon">Folder\'s icon</string>
     <string name="files">Files</string>
     <string name="target_language">Target language</string>
+    <string name="enter_title_here">Enter title here</string>
+    <string name="title">Title</string>
+    <string name="save_document">Save Document</string>
+    <string name="create_new_folder">Create new folder</string>
+    <string name="enter_folder_name_here">Enter folder name here</string>
+    <string name="name">Name</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="pick_a_folder">Pick a folder</string>
 </resources>

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.textrecognitionxml.R
 import com.example.textrecognitionxml.models.Document
 
-class DocumentFolderRecyclerViewAdapter(private val documents: List<Document>) :
+class DocumentFolderRecyclerViewAdapter(private val documents: MutableList<Document>) :
     RecyclerView.Adapter<DocumentFolderRecyclerViewAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
