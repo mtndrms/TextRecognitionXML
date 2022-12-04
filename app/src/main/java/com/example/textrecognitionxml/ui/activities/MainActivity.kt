@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             fabGroup.transitionToStart()
 
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            photoTaken = getPhotoFile()
+        photoTaken = getPhotoFile()
             val providerFile = FileProvider.getUriForFile(
                 this, "com.example.textrecognitionxml.fileprovider", photoTaken
             )

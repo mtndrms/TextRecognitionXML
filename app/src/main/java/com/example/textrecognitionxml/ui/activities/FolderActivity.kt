@@ -25,8 +25,6 @@ class FolderActivity : AppCompatActivity() {
             intent.getIntExtra("folderId", 0)
         )
 
-        println(folder)
-
         val documentFolderRecyclerViewAdapter = DocumentFolderRecyclerViewAdapter(folder.documents)
         tvFolderName.text = folderService.getFolderByIdWithItsDocuments(folder.id).name
 

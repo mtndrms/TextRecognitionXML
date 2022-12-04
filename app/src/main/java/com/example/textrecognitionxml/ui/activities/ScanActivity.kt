@@ -30,7 +30,6 @@ class ScanActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         val ivImage: ImageView = findViewById(R.id.ivImage)
 
         ivImage.setImageBitmap(ScanActivityUtils.bitmap)
-
         launch {
             extractedText(ScanActivityUtils.bitmap)
         }
