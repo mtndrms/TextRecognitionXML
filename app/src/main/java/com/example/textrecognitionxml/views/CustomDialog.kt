@@ -9,7 +9,6 @@ import android.widget.EditText
 import androidx.appcompat.widget.AppCompatButton
 import com.example.textrecognitionxml.R
 import com.example.textrecognitionxml.services.FolderService
-import com.example.textrecognitionxml.utils.DatabaseHelper
 
 class CustomDialog(private var c: Activity) : Dialog(c), View.OnClickListener {
     private var d: Dialog? = null
@@ -18,7 +17,7 @@ class CustomDialog(private var c: Activity) : Dialog(c), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.custom_dialog)
+        setContentView(R.layout.dialog_create_folder)
 
         etFolderName = findViewById(R.id.etFolderName)
         val btnCreate: AppCompatButton = findViewById(R.id.btnCreate)

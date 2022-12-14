@@ -1,8 +1,6 @@
 package com.example.textrecognitionxml.utils
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -12,7 +10,7 @@ class DatabaseHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         private const val DATABASE_NAME = "TEXT_RECOGNITION_APP"
         private const val DATABASE_VERSION = 1
 
-        // Documents table's columns
+        // Documents table columns
         const val D_TABLE_NAME = "documents"
         const val D_ID_COL = "id"
         const val D_FOLDER_ID_COL = "folder_id"
@@ -20,7 +18,7 @@ class DatabaseHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         const val D_DETAIL_COL = "detail"
         const val D_CREATION_DATE_COL = "created_at"
 
-        // Folders table's columns
+        // Folders table columns
         const val F_TABLE_NAME = "folders"
         const val F_ID_COL = "id"
         const val F_NAME_COL = "name"

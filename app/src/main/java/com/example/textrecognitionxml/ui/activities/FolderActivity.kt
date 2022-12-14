@@ -7,10 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.textrecognitionxml.R
 import com.example.textrecognitionxml.adapters.DocumentFolderRecyclerViewAdapter
-import com.example.textrecognitionxml.models.Document
 import com.example.textrecognitionxml.services.FolderService
-import com.example.textrecognitionxml.utils.DatabaseHelper
-import com.example.textrecognitionxml.utils.FakeDatabase
 
 class FolderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

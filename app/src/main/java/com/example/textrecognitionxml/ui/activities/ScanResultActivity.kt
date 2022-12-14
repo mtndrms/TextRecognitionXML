@@ -1,23 +1,28 @@
 package com.example.textrecognitionxml.ui.activities
 
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Path
+import android.os.Build
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.animation.PathInterpolator
 import android.widget.*
-import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import com.example.textrecognitionxml.R
 import com.example.textrecognitionxml.adapters.FoldersSpinnerAdapter
-import com.example.textrecognitionxml.models.Folder
 import com.example.textrecognitionxml.services.DocumentService
 import com.example.textrecognitionxml.services.FolderService
 import com.example.textrecognitionxml.utils.ContextExtensions
-import com.example.textrecognitionxml.utils.DatabaseHelper
+import com.example.textrecognitionxml.utils.OnSwipeTouchListener
 import com.example.textrecognitionxml.utils.ScanActivityUtils
 import com.example.textrecognitionxml.views.CustomDialog
 import com.example.textrecognitionxml.views.TextArea
@@ -34,6 +39,7 @@ import java.util.*
 
 
 class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_result)
@@ -44,17 +50,52 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
         val extensions = ContextExtensions(this)
 
+        // Views
+        val features: LinearLayout = findViewById(R.id.features)
         val tvExtractedText: TextView = findViewById(R.id.tvExtractedText)
         val ivClose: ImageView = findViewById(R.id.ivClose)
         val ivShare: ImageView = findViewById(R.id.ivShare)
-        val ivSave: ImageView = findViewById(R.id.ivSaveDocument)
-        val ivTranslate: ImageView = findViewById(R.id.ivTranslate)
+        val btnSave: ImageButton = findViewById(R.id.btnSave)
+        val btnTranslate: ImageButton = findViewById(R.id.btnTranslate)
         val fabEdit: FloatingActionButton = findViewById(R.id.fabEdit)
         val etEditor: TextArea = findViewById(R.id.etEditor)
         val ddTargetLanguages: TextInputLayout = findViewById(R.id.ddTargetLanguages)
+        val ivFeatures: ImageView = findViewById(R.id.ivFeatures)
 
         tvExtractedText.movementMethod = ScrollingMovementMethod()
         tvExtractedText.text = ScanActivityUtils.extractedText
+
+        tvExtractedText.setOnTouchListener(object : OnSwipeTouchListener(this@ScanResultActivity) {
+            override fun onSwipeLeft() {
+                super.onSwipeLeft()
+                ObjectAnimator.ofFloat(features, "translationX", -200f).apply {
+                    duration = 250
+                    start()
+                }.start()
+
+                ivFeatures.visibility = View.GONE
+            }
+
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                ObjectAnimator.ofFloat(features, "translationX", 200f).apply {
+                    duration = 250
+                    start()
+                }.doOnEnd {
+                    ivFeatures.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onSwipeUp() {
+                super.onSwipeUp()
+                println("UP")
+            }
+
+            override fun onSwipeDown() {
+                super.onSwipeDown()
+                println("DOWN")
+            }
+        });
 
         ivClose.setOnClickListener {
             finish()
@@ -71,7 +112,15 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             startActivity(shareIntent)
         }
 
-        ivTranslate.setOnClickListener {
+        ivFeatures.setOnClickListener {
+            ObjectAnimator.ofFloat(features, "translationX", -200f).apply {
+                duration = 250
+                start()
+            }.start()
+            ivFeatures.visibility = View.GONE
+        }
+
+        btnTranslate.setOnClickListener {
             ddTargetLanguages.run {
                 visibility = if (visibility == View.GONE) {
                     View.VISIBLE
@@ -81,7 +130,7 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             }
         }
 
-        ivSave.setOnClickListener {
+        btnSave.setOnClickListener {
             val contentView: View = View.inflate(
                 this@ScanResultActivity, R.layout.fragment_bottomsheet_save_document, null
             )

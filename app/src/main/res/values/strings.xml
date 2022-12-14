@@ -30,4 +30,11 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="pick_a_folder">Pick a folder</string>
+    <string name="translate_button">translate button</string>
+    <string name="save_button">save button</string>
+    <string name="extract_entity">extract entity</string>
+    <string name="detect_colors">detect colors</string>
+    <string name="image_labeling">image labeling</string>
+    <string name="show_image">show image</string>
+    <string name="show_options">show options</string>
 </resources>

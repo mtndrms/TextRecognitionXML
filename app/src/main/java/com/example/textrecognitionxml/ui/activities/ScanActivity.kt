@@ -10,9 +10,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.example.textrecognitionxml.R
 import com.example.textrecognitionxml.utils.ScanActivityUtils
 import com.google.mlkit.nl.languageid.LanguageIdentification

@@ -2,7 +2,6 @@ package com.example.textrecognitionxml.services
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import com.example.textrecognitionxml.models.Document
 import com.example.textrecognitionxml.models.Folder
 import com.example.textrecognitionxml.utils.DatabaseHelper

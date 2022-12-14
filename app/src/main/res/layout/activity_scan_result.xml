@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/motionLayout"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -44,33 +44,6 @@
             android:layout_marginEnd="15dp"
             android:contentDescription="@string/navigation_icon"
             android:src="@drawable/ic_share" />
-
-        <ImageView
-            android:id="@+id/ivTranslate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="50dp"
-            android:contentDescription="@string/navigation_icon"
-            android:src="@drawable/ic_translate" />
-
-        <ImageView
-            android:id="@+id/ivSaveDocument"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="85dp"
-            android:contentDescription="@string/navigation_icon"
-            android:src="@drawable/ic_save" />
-
-        <ImageView
-            android:id="@+id/ivReadDocumentFromDatabase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="120dp"
-            android:contentDescription="@string/navigation_icon"
-            android:src="@drawable/ic_get" />
     </RelativeLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -96,8 +69,8 @@
             android:text="@string/target_language" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tvExtractedText"
+    <com.example.textrecognitionxml.views.TextArea
+        android:id="@+id/etEditor"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="25dp"
@@ -105,15 +78,15 @@
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
         android:fontFamily="@font/roboto_regular"
-        android:maxLines="999999999"
-        android:scrollbars="vertical"
+        android:gravity="start"
+        android:importantForAutofill="no"
+        android:inputType="text|textMultiLine|textNoSuggestions"
         android:textAlignment="viewStart"
-        android:textColor="@color/black"
-        android:textIsSelectable="true"
         android:textSize="16sp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ddTargetLanguages" />
+        app:layout_constraintTop_toTopOf="@id/ddTargetLanguages"
+        tools:ignore="LabelFor" />
 
     <TextView
         android:id="@+id/tvTranslatedText"
@@ -134,8 +107,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ddTargetLanguages" />
 
-    <com.example.textrecognitionxml.views.TextArea
-        android:id="@+id/etEditor"
+    <TextView
+        android:id="@+id/tvExtractedText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="25dp"
@@ -143,15 +116,15 @@
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
         android:fontFamily="@font/roboto_regular"
-        android:gravity="start"
-        android:importantForAutofill="no"
-        android:inputType="text|textMultiLine|textNoSuggestions"
+        android:maxLines="999999999"
+        android:scrollbars="vertical"
         android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textIsSelectable="true"
         android:textSize="16sp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ddTargetLanguages"
-        tools:ignore="LabelFor" />
+        app:layout_constraintTop_toBottomOf="@id/ddTargetLanguages" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabEdit"
@@ -165,4 +138,86 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/gray" />
+
+    <LinearLayout
+        android:id="@+id/features"
+        android:layout_width="75dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <ImageButton
+            android:id="@+id/btnSave"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button"
+            android:contentDescription="@string/save_button"
+            android:src="@drawable/ic_save"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btnTranslate"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button"
+            android:contentDescription="@string/translate_button"
+            android:src="@drawable/ic_translate"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btnExtractEntity"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button"
+            android:contentDescription="@string/extract_entity"
+            android:src="@drawable/ic_entity"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btnDetectColors"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button"
+            android:contentDescription="@string/detect_colors"
+            android:src="@drawable/ic_colors"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btnImageLabeling"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button"
+            android:contentDescription="@string/image_labeling"
+            android:src="@drawable/ic_image_labeling"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btnShowImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button"
+            android:contentDescription="@string/show_image"
+            android:src="@drawable/ic_image"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivFeatures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_left"
+        app:tint="@color/blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/features"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        android:contentDescription="@string/show_options" />
 </androidx.constraintlayout.widget.ConstraintLayout>
