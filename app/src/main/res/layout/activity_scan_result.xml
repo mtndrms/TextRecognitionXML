@@ -23,7 +23,8 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="15dp"
             android:contentDescription="@string/navigation_icon"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_close"
+            app:tint="@color/font_color_dark" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -43,7 +44,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
             android:contentDescription="@string/navigation_icon"
-            android:src="@drawable/ic_share" />
+            android:src="@drawable/ic_share"
+            app:tint="@color/font_color_dark" />
     </RelativeLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -82,6 +84,7 @@
         android:importantForAutofill="no"
         android:inputType="text|textMultiLine|textNoSuggestions"
         android:textAlignment="viewStart"
+        android:textColor="@color/font_color_dark"
         android:textSize="16sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -100,7 +103,7 @@
         android:maxLines="999999999"
         android:scrollbars="vertical"
         android:textAlignment="viewStart"
-        android:textColor="@color/black"
+        android:textColor="@color/font_color_dark"
         android:textIsSelectable="true"
         android:textSize="16sp"
         android:visibility="visible"
@@ -119,7 +122,7 @@
         android:maxLines="999999999"
         android:scrollbars="vertical"
         android:textAlignment="viewStart"
-        android:textColor="@color/black"
+        android:textColor="@color/font_color_dark"
         android:textIsSelectable="true"
         android:textSize="16sp"
         android:visibility="visible"
@@ -132,7 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/lighter_blue"
+        android:backgroundTint="@color/branding_color_second"
         android:contentDescription="@string/edit_extracted_text"
         android:src="@drawable/ic_edit"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -157,7 +160,7 @@
             android:background="@drawable/bg_button"
             android:contentDescription="@string/save_button"
             android:src="@drawable/ic_save"
-            app:tint="@color/white" />
+            app:tint="@color/font_color_light" />
 
         <ImageButton
             android:id="@+id/btnTranslate"
@@ -167,7 +170,7 @@
             android:background="@drawable/bg_button"
             android:contentDescription="@string/translate_button"
             android:src="@drawable/ic_translate"
-            app:tint="@color/white" />
+            app:tint="@color/font_color_light" />
 
         <ImageButton
             android:id="@+id/btnExtractEntity"
@@ -177,7 +180,7 @@
             android:background="@drawable/bg_button"
             android:contentDescription="@string/extract_entity"
             android:src="@drawable/ic_entity"
-            app:tint="@color/white" />
+            app:tint="@color/font_color_light" />
 
         <ImageButton
             android:id="@+id/btnDetectColors"
@@ -187,7 +190,7 @@
             android:background="@drawable/bg_button"
             android:contentDescription="@string/detect_colors"
             android:src="@drawable/ic_colors"
-            app:tint="@color/white" />
+            app:tint="@color/font_color_light" />
 
         <ImageButton
             android:id="@+id/btnImageLabeling"
@@ -197,7 +200,7 @@
             android:background="@drawable/bg_button"
             android:contentDescription="@string/image_labeling"
             android:src="@drawable/ic_image_labeling"
-            app:tint="@color/white" />
+            app:tint="@color/font_color_light" />
 
         <ImageButton
             android:id="@+id/btnShowImage"
@@ -207,17 +210,17 @@
             android:background="@drawable/bg_button"
             android:contentDescription="@string/show_image"
             android:src="@drawable/ic_image"
-            app:tint="@color/white" />
+            app:tint="@color/font_color_light" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/ivFeatures"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/show_options"
         android:src="@drawable/ic_arrow_left"
-        app:tint="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/features"
-        app:layout_constraintTop_toBottomOf="@id/topBar"
-        android:contentDescription="@string/show_options" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/branding_color" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,13 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-ğ
+
     <color name="background">#F4F6FA</color>
     <color name="bottom_navigation_background">#FEFEFE</color>
     <color name="font_color_dark">#353441</color>
     <color name="font_color_light">#CED4DA</color>
-    <color name="blue">#2459CC</color>
-    <color name="lighter_blue">#005DFF</color>
-    <color name="ice_blue">#C0D5FE</color>
+    <color name="branding_color">#2459CC</color>
+    <color name="branding_color_second">#005DFF</color>
+    <color name="branding_color_third">#C0D5FE</color>
     <color name="gray">#D7E4FC</color>
 </resources>

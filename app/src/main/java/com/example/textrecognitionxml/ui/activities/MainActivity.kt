@@ -14,7 +14,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.example.textrecognitionxml.ui.fragments.ProfileFragment
 import com.example.textrecognitionxml.R
+import com.example.textrecognitionxml.ui.fragments.HomeFragment
+import com.example.textrecognitionxml.utils.Helpers
+import com.example.textrecognitionxml.utils.Helpers.changeFragment
 import com.example.textrecognitionxml.utils.ScanActivityUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,10 +43,12 @@ class MainActivity : AppCompatActivity() {
         val fabTakePhoto: FloatingActionButton = findViewById(R.id.fabTakePhoto)
         val fabMain: FloatingActionButton = findViewById(R.id.floatingButton)
 
+        Helpers.setTheme(this)
+
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.home -> println("Home")
-                R.id.profile -> println("Profile")
+                R.id.home -> changeFragment(HomeFragment(), this)
+                R.id.profile -> changeFragment(ProfileFragment(), this)
                 else -> println("Nothing")
             }
             true
@@ -70,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             fabGroup.transitionToStart()
 
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        photoTaken = getPhotoFile()
+            photoTaken = getPhotoFile()
             val providerFile = FileProvider.getUriForFile(
                 this, "com.example.textrecognitionxml.fileprovider", photoTaken
             )

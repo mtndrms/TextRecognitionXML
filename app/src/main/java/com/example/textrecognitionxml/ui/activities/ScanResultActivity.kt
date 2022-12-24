@@ -2,15 +2,12 @@ package com.example.textrecognitionxml.ui.activities
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Intent
-import android.graphics.Path
-import android.os.Build
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.view.animation.PathInterpolator
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -30,13 +27,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.nl.entityextraction.*
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import java.util.*
-
 
 class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     @SuppressLint("ClickableViewAccessibility")
@@ -55,12 +52,13 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         val tvExtractedText: TextView = findViewById(R.id.tvExtractedText)
         val ivClose: ImageView = findViewById(R.id.ivClose)
         val ivShare: ImageView = findViewById(R.id.ivShare)
-        val btnSave: ImageButton = findViewById(R.id.btnSave)
-        val btnTranslate: ImageButton = findViewById(R.id.btnTranslate)
         val fabEdit: FloatingActionButton = findViewById(R.id.fabEdit)
         val etEditor: TextArea = findViewById(R.id.etEditor)
         val ddTargetLanguages: TextInputLayout = findViewById(R.id.ddTargetLanguages)
         val ivFeatures: ImageView = findViewById(R.id.ivFeatures)
+        val btnSave: ImageButton = findViewById(R.id.btnSave)
+        val btnTranslate: ImageButton = findViewById(R.id.btnTranslate)
+        val btnExtractEntity: ImageButton = findViewById(R.id.btnExtractEntity)
 
         tvExtractedText.movementMethod = ScrollingMovementMethod()
         tvExtractedText.text = ScanActivityUtils.extractedText
@@ -69,7 +67,7 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             override fun onSwipeLeft() {
                 super.onSwipeLeft()
                 ObjectAnimator.ofFloat(features, "translationX", -200f).apply {
-                    duration = 250
+                    duration = ANIMATION_DURATION
                     start()
                 }.start()
 
@@ -79,7 +77,7 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             override fun onSwipeRight() {
                 super.onSwipeRight()
                 ObjectAnimator.ofFloat(features, "translationX", 200f).apply {
-                    duration = 250
+                    duration = ANIMATION_DURATION
                     start()
                 }.doOnEnd {
                     ivFeatures.visibility = View.VISIBLE
@@ -95,7 +93,7 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 super.onSwipeDown()
                 println("DOWN")
             }
-        });
+        })
 
         ivClose.setOnClickListener {
             finish()
@@ -114,7 +112,7 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
         ivFeatures.setOnClickListener {
             ObjectAnimator.ofFloat(features, "translationX", -200f).apply {
-                duration = 250
+                duration = ANIMATION_DURATION
                 start()
             }.start()
             ivFeatures.visibility = View.GONE
@@ -176,6 +174,71 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             acFolders.setOnItemClickListener { parent, view, position, id ->
                 folderId = folders[position].id
             }
+        }
+
+        /*
+        TYPE_ADDRESS = 1
+        TYPE_DATE_TIME = 2
+        TYPE_EMAIL = 3
+        TYPE_FLIGHT_NUMBER = 4
+        TYPE_IBAN = 5
+        TYPE_ISBN = 6
+        TYPE_PAYMENT_CARD = 7
+        TYPE_PHONE = 8
+        TYPE_TRACKING_NUMBER = 9
+        TYPE_URL = 10
+        TYPE_MONEY = 11
+        */
+        btnExtractEntity.setOnClickListener {
+            val entityExtractor =
+                EntityExtraction.getClient(
+                    EntityExtractorOptions.Builder(EntityExtractorOptions.ENGLISH)
+                        .build()
+                )
+
+            entityExtractor
+                .downloadModelIfNeeded()
+                .addOnSuccessListener { _ ->
+                    val params =
+                        EntityExtractionParams.Builder(ScanActivityUtils.extractedText).build()
+                    entityExtractor.annotate(params).addOnSuccessListener {
+                        for (entityAnnotation in it) {
+                            val entities: List<Entity> = entityAnnotation.entities
+
+                            Log.d(TAG, "Range: ${entityAnnotation.start} - ${entityAnnotation.end}")
+                            for (entity in entities) {
+                                when (entity) {
+                                    is DateTimeEntity -> {
+                                        Log.d(TAG, "Granularity: ${entity.dateTimeGranularity}")
+                                        Log.d(TAG, "TimeStamp: ${entity.timestampMillis}")
+                                    }
+                                    is FlightNumberEntity -> {
+                                        Log.d(TAG, "Airline Code: ${entity.airlineCode}")
+                                        Log.d(TAG, "Flight number: ${entity.flightNumber}")
+                                    }
+                                    is MoneyEntity -> {
+                                        Log.d(TAG, "Currency: ${entity.unnormalizedCurrency}")
+                                        Log.d(TAG, "Integer part: ${entity.integerPart}")
+                                        Log.d(TAG, "Fractional Part: ${entity.fractionalPart}")
+                                    }
+                                    is IbanEntity -> {
+                                        Log.d(TAG, "Currency: ${entity.ibanCountryCode}")
+                                        Log.d(TAG, "Integer part: ${entity.iban}")
+                                    }
+                                    else -> {
+                                        Log.d(TAG, "  $entity")
+                                    }
+                                }
+                            }
+                        }
+                        entityExtractor.close()
+                    }.addOnFailureListener {
+                        println(it.message.toString())
+                    }
+                }
+                .addOnFailureListener { _ ->
+                    println("Failed at downloading entity extraction model!")
+                }
         }
 
         fabEdit.setOnClickListener {
@@ -259,5 +322,9 @@ class ScanResultActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             Toast.makeText(this, "Failed while downloading model!", Toast.LENGTH_SHORT).show()
         }
         lifecycle.addObserver(translator)
+    }
+
+    companion object {
+        private const val ANIMATION_DURATION = 250L
     }
 }

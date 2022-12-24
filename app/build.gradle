@@ -44,5 +44,6 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
     implementation 'com.google.android.gms:play-services-mlkit-language-id:17.0.0'
+    implementation 'com.google.mlkit:entity-extraction:16.0.0-beta4'
     implementation 'com.google.mlkit:translate:17.0.1'
 }
